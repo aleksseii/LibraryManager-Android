@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LibraryAPIVolley libraryAPIVolley = new LibraryAPIVolley(this);
-        libraryAPIVolley.fillGenreList();
+        libraryAPIVolley.deleteBook(1L);
 //        libraryAPIVolley.addBook(Book.builder()
 //                .name("qwerty")
 //                .author(new Author("First author name"))

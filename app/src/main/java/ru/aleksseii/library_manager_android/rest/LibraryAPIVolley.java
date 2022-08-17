@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -170,10 +172,10 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
 
         String url = BASE_URL.concat("/book");
 
-        StringRequest stringRequest = new StringRequest(
+        StringRequest postRequest = new StringRequest(
                 Request.Method.POST,
                 url,
-                getAddBookListener(),
+                getUpdateBookListListener(),
                 errorListener) {
 
             @NonNull
@@ -190,25 +192,62 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
             }
         };
 
-        requestQueue.add(stringRequest);
-    }
-
-    @NonNull
-    private Response.Listener<String> getAddBookListener() {
-        return (String response) -> {
-
-            fillBookList();
-            Log.d(TAG, response);
-        };
+        requestQueue.add(postRequest);
     }
 
     @Override
     public void updateBook(long id, String newBookName, String newAuthorName, String newGenreName) {
 
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        String url = BASE_URL.concat("/book/").concat(Long.toString(id));
+
+        StringRequest putRequest = new StringRequest(
+                Request.Method.PUT,
+                url,
+                getUpdateBookListListener(),
+                errorListener) {
+
+            @NonNull
+            @Override
+            protected Map<String, String> getParams() {
+
+                Map<String, String> params = new HashMap<>();
+
+                params.put("book", newBookName);
+                params.put("author", newAuthorName);
+                params.put("genre", newGenreName);
+
+                return params;
+            }
+        };
+
+        requestQueue.add(putRequest);
     }
 
     @Override
     public void deleteBook(long id) {
 
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        String url = BASE_URL.concat("/book/").concat(Long.toString(id));
+
+        StringRequest deleteRequest = new StringRequest(
+                Request.Method.DELETE,
+                url,
+                getUpdateBookListListener(),
+                errorListener
+        );
+
+        requestQueue.add(deleteRequest);
+    }
+
+    @NonNull
+    private Response.Listener<String> getUpdateBookListListener() {
+        return (String response) -> {
+
+            fillBookList();
+            Log.d(TAG, response);
+        };
     }
 }
