@@ -1,5 +1,7 @@
 package ru.aleksseii.library_manager_android.domain;
 
+import androidx.annotation.NonNull;
+
 public class Genre {
 
     private long id;
@@ -21,5 +23,14 @@ public class Genre {
 
     public String getName() {
         return name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Genre{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

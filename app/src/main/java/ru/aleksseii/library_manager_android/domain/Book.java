@@ -1,5 +1,7 @@
 package ru.aleksseii.library_manager_android.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Book {
@@ -27,11 +29,6 @@ public class Book {
         this.author = author;
         this.genre = genre;
         this.comments = comments;
-    }
-
-    public Book(long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public long getId() {
@@ -91,5 +88,22 @@ public class Book {
         public Book build() {
             return Book.this;
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder(
+                "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", author=" + author +
+                ", genre=" + genre +
+                ", comments=[");
+
+        for (int i = 0; i < comments.size(); i++) {
+            result.append(i + 1).append(".) ").append(comments.get(i).getContent()).append(' ');
+        }
+        return result.append("]}").toString();
     }
 }

@@ -1,5 +1,7 @@
 package ru.aleksseii.library_manager_android.domain;
 
+import androidx.annotation.NonNull;
+
 public class Author {
 
     private long id;
@@ -21,5 +23,14 @@ public class Author {
 
     public String getName() {
         return name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
