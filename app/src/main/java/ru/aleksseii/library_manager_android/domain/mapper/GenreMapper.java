@@ -7,16 +7,16 @@ import ru.aleksseii.library_manager_android.domain.Genre;
 
 public class GenreMapper {
 
-    public static Genre genreFromJson(JSONObject genreJson) throws JSONException {
+    public static Genre genreFromJson(JSONObject genreJSON) throws JSONException {
 
         return new Genre(
-                genreJson.getInt("id"),
-                genreJson.getString("name")
+                genreJSON.getInt("id"),
+                genreJSON.getString("name")
         );
     }
 
-    public static Genre genreFromBookJson(JSONObject bookJson) throws JSONException {
+    public static Genre genreFromBookJson(JSONObject bookJSON) throws JSONException {
 
-        return GenreMapper.genreFromJson(bookJson.getJSONObject("genreDTO"));
+        return GenreMapper.genreFromJson(bookJSON.getJSONObject("genreDTO"));
     }
 }

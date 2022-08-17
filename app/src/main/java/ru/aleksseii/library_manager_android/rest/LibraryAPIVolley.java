@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -21,8 +19,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.aleksseii.library_manager_android.domain.Author;
 import ru.aleksseii.library_manager_android.domain.Book;
+import ru.aleksseii.library_manager_android.domain.Genre;
+import ru.aleksseii.library_manager_android.domain.mapper.AuthorMapper;
 import ru.aleksseii.library_manager_android.domain.mapper.BookMapper;
+import ru.aleksseii.library_manager_android.domain.mapper.GenreMapper;
 import ru.aleksseii.library_manager_android.nodb.NoDb;
 
 public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
@@ -71,8 +73,8 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
 
                 for (int i = 0; i < response.length(); i++) {
 
-                    JSONObject bookJson = response.getJSONObject(i);
-                    Book book = BookMapper.bookFromJson(bookJson);
+                    JSONObject bookJSON = response.getJSONObject(i);
+                    Book book = BookMapper.bookFromJson(bookJSON);
                     NoDb.BOOK_LIST.add(book);
                 }
                 Log.d(TAG, NoDb.BOOK_LIST.toString());
@@ -86,11 +88,79 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
     @Override
     public void fillAuthorList() {
 
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        String url = BASE_URL.concat("/author");
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                getFillAuthorListListener(),
+                errorListener
+        );
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    @NonNull
+    private Response.Listener<JSONArray> getFillAuthorListListener() {
+        return (JSONArray response) -> {
+
+            NoDb.AUTHOR_LIST.clear();
+
+            try {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONObject authorJSON = response.getJSONObject(i);
+                    Author author = AuthorMapper.authorFromJson(authorJSON);
+                    NoDb.AUTHOR_LIST.add(author);
+                }
+                Log.d(TAG, NoDb.AUTHOR_LIST.toString());
+
+            } catch (JSONException jsonEX) {
+                jsonEX.printStackTrace();
+            }
+        };
     }
 
     @Override
     public void fillGenreList() {
 
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        String url = BASE_URL.concat("/genre");
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                getFillGenreListListener(),
+                errorListener
+        );
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    @NonNull
+    private Response.Listener<JSONArray> getFillGenreListListener() {
+        return (JSONArray response) -> {
+
+            try {
+
+                for (int i = 0; i < response.length(); i++) {
+
+                    JSONObject genreJSON = response.getJSONObject(i);
+                    Genre genre = GenreMapper.genreFromJson(genreJSON);
+                    NoDb.GENRE_LIST.add(genre);
+                }
+                Log.d(TAG, NoDb.GENRE_LIST.toString());
+
+            } catch (JSONException jsonEx) {
+                jsonEx.printStackTrace();
+            }
+        };
     }
 
     @Override

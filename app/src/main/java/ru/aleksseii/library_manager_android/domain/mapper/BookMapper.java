@@ -7,14 +7,14 @@ import ru.aleksseii.library_manager_android.domain.Book;
 
 public class BookMapper {
 
-    public static Book bookFromJson(JSONObject bookJson) throws JSONException {
+    public static Book bookFromJson(JSONObject bookJSON) throws JSONException {
 
         return Book.builder()
-                .id(bookJson.getInt("id"))
-                .name(bookJson.getString("name"))
-                .author(AuthorMapper.authorFromBookJson(bookJson))
-                .genre(GenreMapper.genreFromBookJson(bookJson))
-                .comments(CommentMapper.commentsFromBookJson(bookJson))
+                .id(bookJSON.getInt("id"))
+                .name(bookJSON.getString("name"))
+                .author(AuthorMapper.authorFromBookJson(bookJSON))
+                .genre(GenreMapper.genreFromBookJson(bookJSON))
+                .comments(CommentMapper.commentsFromBookJson(bookJSON))
                 .build();
     }
 }

@@ -13,18 +13,18 @@ import ru.aleksseii.library_manager_android.domain.Comment;
 
 public class CommentMapper {
 
-    public static Comment commentFromJson(JSONObject commentJson) throws JSONException {
+    public static Comment commentFromJson(JSONObject commentJSON) throws JSONException {
 
         return new Comment(
-                commentJson.getInt("id"),
-                commentJson.getString("content")
+                commentJSON.getInt("id"),
+                commentJSON.getString("content")
         );
     }
 
-    public static List<Comment> commentsFromBookJson(JSONObject bookJson) throws JSONException {
+    public static List<Comment> commentsFromBookJson(JSONObject bookJSON) throws JSONException {
 
         List<Comment> comments = new ArrayList<>();
-        JSONArray commentsJson = bookJson.getJSONArray("commentDTOList");
+        JSONArray commentsJson = bookJSON.getJSONArray("commentDTOList");
         for (int i = 0; i < commentsJson.length(); i++) {
 
             comments.add(commentFromJson(commentsJson.getJSONObject(i)));
