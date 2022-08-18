@@ -14,15 +14,15 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import ru.aleksseii.library_manager_android.R;
-import ru.aleksseii.library_manager_android.domain.Author;
+import ru.aleksseii.library_manager_android.domain.Genre;
 import ru.aleksseii.library_manager_android.nodb.NoDb;
 
-public class AuthorSpinnerAdapter extends ArrayAdapter<Author> {
+public class GenreSpinnerAdapter extends ArrayAdapter<Genre> {
 
-    public AuthorSpinnerAdapter(@NonNull Context context,
-                                @NonNull List<Author> authors) {
+    public GenreSpinnerAdapter(@NonNull Context context,
+                               @NonNull List<Genre> genres) {
 
-        super(context, R.layout.spinner_item, authors);
+        super(context, R.layout.spinner_item, genres);
     }
 
     @NonNull
@@ -39,7 +39,7 @@ public class AuthorSpinnerAdapter extends ArrayAdapter<Author> {
         }
 
         TextView tvSpinnerItem = convertView.findViewById(R.id.tv_spinner_item);
-        tvSpinnerItem.setText(NoDb.AUTHOR_LIST.get(position).getName());
+        tvSpinnerItem.setText(NoDb.GENRE_LIST.get(position).getName());
 
         return convertView;
     }
