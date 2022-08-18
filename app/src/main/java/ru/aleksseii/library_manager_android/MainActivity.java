@@ -23,6 +23,8 @@ import ru.aleksseii.library_manager_android.rest.LibraryAPIVolley;
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity {
 
+    private final LibraryAPIVolley libraryAPIVolley = new LibraryAPIVolley(this);
+
     private AppCompatButton addBookButton;
 
     private RecyclerView rvBooks;
@@ -33,6 +35,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ItemTouchHelper itemTouchHelper;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        libraryAPIVolley.fillBookList();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
         addBookButton = findViewById(R.id.btn_add_book);
         addBookButton.setOnClickListener(getAddBookButtonListener());
 
-        LibraryAPIVolley libraryAPIVolley = new LibraryAPIVolley(this);
-        libraryAPIVolley.fillBookList();
+        libraryAPIVolley.fillAuthorList();
+        libraryAPIVolley.fillGenreList();
 
         rvBooks = findViewById(R.id.rv_books);
         bookAdapter = new BookAdapter(this, NoDb.BOOK_LIST);
         rvBooks.setAdapter(bookAdapter);
 
-        initSimpleCallbackWith(libraryAPIVolley);
+        simpleCallback = getSimpleCallback();
 
         itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rvBooks);
@@ -62,14 +72,12 @@ public class MainActivity extends AppCompatActivity {
             this.getSupportFragmentManager().beginTransaction()
                     .add(R.id.fl_main, addBookFragment)
                     .commit();
-
-
         };
     }
 
-    private void initSimpleCallbackWith(LibraryAPIVolley libraryAPIVolley) {
+    private ItemTouchHelper.SimpleCallback getSimpleCallback() {
 
-        simpleCallback = new ItemTouchHelper.SimpleCallback(
+        return new ItemTouchHelper.SimpleCallback(
                 ItemTouchHelper.ACTION_STATE_IDLE,
                 ItemTouchHelper.LEFT) {
 

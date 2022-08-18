@@ -102,8 +102,10 @@ public class Book implements Serializable {
                 ", genre=" + genre +
                 ", comments=[");
 
-        for (int i = 0; i < comments.size(); i++) {
-            result.append(i + 1).append(".) ").append(comments.get(i).getContent()).append(' ');
+        if (comments != null) {
+            for (int i = 0; i < comments.size(); i++) {
+                result.append(i + 1).append(".) ").append(comments.get(i).getContent()).append(' ');
+            }
         }
         return result.append("]}").toString();
     }
