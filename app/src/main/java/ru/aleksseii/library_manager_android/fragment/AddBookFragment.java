@@ -54,20 +54,25 @@ public class AddBookFragment extends Fragment {
         spinnerAuthor.setAdapter(authorSpinnerAdapter);
         spinnerGenre.setAdapter(genreSpinnerAdapter);
 
-        buttonConfirmAddingBook.setOnClickListener(getButtonAddBookListener());
+        buttonConfirmAddingBook.setOnClickListener(getButtonConfirmAddingBookListener());
 
         return view;
     }
 
     @NonNull
-    private View.OnClickListener getButtonAddBookListener() {
+    private View.OnClickListener getButtonConfirmAddingBookListener() {
         return (View view) -> {
 
             String bookName = etBookName.getText().toString();
 
-            if (bookName.isEmpty()) {
+            if (bookName.isEmpty() ||
+                    bookName.length() > UpdateBookFragment.MAX_BOOK_NAME_LENGTH) {
+
+                String errorText = bookName.isEmpty() ?
+                        "New book requires name!" : "Your book name is too long!";
+
                 etBookName.requestFocus();
-                etBookName.setError("New book requires name!");
+                etBookName.setError(errorText);
                 return;
             }
 
