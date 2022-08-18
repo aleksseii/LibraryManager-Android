@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.aleksseii.library_manager_android.MainActivity;
 import ru.aleksseii.library_manager_android.domain.Author;
 import ru.aleksseii.library_manager_android.domain.Book;
 import ru.aleksseii.library_manager_android.domain.Genre;
@@ -79,6 +80,8 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
                     Book book = BookMapper.bookFromJson(bookJSON);
                     NoDb.BOOK_LIST.add(book);
                 }
+
+                ((MainActivity) context).updateAdapter();
                 Log.d(TAG, NoDb.BOOK_LIST.toString());
 
             } catch (JSONException jsonEx) {
