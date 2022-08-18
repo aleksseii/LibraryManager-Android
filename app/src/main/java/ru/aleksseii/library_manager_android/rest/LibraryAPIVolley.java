@@ -152,6 +152,8 @@ public class LibraryAPIVolley implements BookAPI, AuthorAPI, GenreAPI {
     private Response.Listener<JSONArray> getFillGenreListListener() {
         return (JSONArray response) -> {
 
+            NoDb.GENRE_LIST.clear();
+
             try {
 
                 for (int i = 0; i < response.length(); i++) {

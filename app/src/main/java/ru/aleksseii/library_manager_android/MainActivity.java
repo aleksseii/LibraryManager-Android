@@ -2,6 +2,7 @@ package ru.aleksseii.library_manager_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -9,16 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.List;
 
 import ru.aleksseii.library_manager_android.adapter.BookAdapter;
 import ru.aleksseii.library_manager_android.domain.Book;
+import ru.aleksseii.library_manager_android.fragment.AddBookFragment;
 import ru.aleksseii.library_manager_android.nodb.NoDb;
 import ru.aleksseii.library_manager_android.rest.LibraryAPIVolley;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class MainActivity extends AppCompatActivity {
+
+    private AppCompatButton addBookButton;
 
     private RecyclerView rvBooks;
 
@@ -33,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        addBookButton = findViewById(R.id.btn_add_book);
+        addBookButton.setOnClickListener(getAddBookButtonListener());
+
         LibraryAPIVolley libraryAPIVolley = new LibraryAPIVolley(this);
         libraryAPIVolley.fillBookList();
 
@@ -44,6 +52,19 @@ public class MainActivity extends AppCompatActivity {
 
         itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rvBooks);
+    }
+
+    @NonNull
+    private View.OnClickListener getAddBookButtonListener() {
+        return (View view) -> {
+
+            AddBookFragment addBookFragment = new AddBookFragment();
+            this.getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fl_main, addBookFragment)
+                    .commit();
+
+
+        };
     }
 
     private void initSimpleCallbackWith(LibraryAPIVolley libraryAPIVolley) {
