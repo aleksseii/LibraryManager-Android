@@ -2,11 +2,15 @@ package ru.aleksseii.library_manager_android;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import java.util.List;
 
 import ru.aleksseii.library_manager_android.adapter.BookAdapter;
 import ru.aleksseii.library_manager_android.domain.Book;
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,int direction) {
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
                 Book book = NoDb.BOOK_LIST.get(viewHolder.getAdapterPosition());
 
@@ -66,6 +70,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+
+        if (fragments.isEmpty()) {
+            this.finish();
+            return;
+        }
+
+        fragmentManager.beginTransaction()
+                .remove(fragments.get(fragments.size() - 1))
+                .commit();
     }
 
     @SuppressLint("NotifyDataSetChanged")

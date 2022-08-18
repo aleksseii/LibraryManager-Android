@@ -1,21 +1,26 @@
 package ru.aleksseii.library_manager_android.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import ru.aleksseii.library_manager_android.R;
 import ru.aleksseii.library_manager_android.domain.Book;
+import ru.aleksseii.library_manager_android.fragment.UpdateBookFragment;
 import ru.aleksseii.library_manager_android.nodb.NoDb;
 
 public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final String BOOK_KEY = "Book";
 
     private final Context context;
 
@@ -57,12 +62,32 @@ public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        Book book = NoDb.BOOK_LIST.get(position);
+        Book currentBook = NoDb.BOOK_LIST.get(position);
 
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        myViewHolder.tvName.setText(book.getName());
-        myViewHolder.tvAuthor.setText(book.getAuthor().getName());
-        myViewHolder.tvGenre.setText(book.getGenre().getName());
+        myViewHolder.tvName.setText(currentBook.getName());
+        myViewHolder.tvAuthor.setText(currentBook.getAuthor().getName());
+        myViewHolder.tvGenre.setText(currentBook.getGenre().getName());
+
+        holder.itemView.setOnClickListener(getItemOnClickListener(currentBook));
+    }
+
+    @NonNull
+    private View.OnClickListener getItemOnClickListener(Book book) {
+        return (View view) -> {
+
+            UpdateBookFragment updateBookFragment = new UpdateBookFragment();
+
+            Bundle bundleArgs = new Bundle();
+            bundleArgs.putSerializable(BOOK_KEY, book);
+
+            updateBookFragment.setArguments(bundleArgs);
+
+            ((AppCompatActivity) context).getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fl_main, updateBookFragment)
+                    .commit();
+        };
     }
 
     @Override
